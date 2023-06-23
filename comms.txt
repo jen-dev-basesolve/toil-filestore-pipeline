@@ -1,0 +1,227 @@
+what is a job in toil?
+- 
+
+----------------------
+What is stream in job.fileStore.writeGlobalFileStream?
+
+
+
+
+---------------------------
+There is a option for deleting the file from filestore.
+  
+# Delete the first file from the global file-store.
+> $ job.fileStore.deleteGlobalFile(fileID)
+
+---------------------------
+
+External files can be imported & exported into the filestore using -
+
+toil.common.Toil.importFile(), and 
+toil.common.Toil.exportFile() 
+
+
+-------------------------------
+Different methods in fileStore
+
+createFileStore()
+shutdownFileStore()
+
+open(job)
+- Create the context manager around tasks prior and after a job has been run.
+- Q. what is a context manager and what does it do?
+	- Toil.Runner is a context manager. A context manager is used to start or restart the workflow.
+
+
+getLocalTempDir()
+- Get a new local temporary directory in which to write files.
+- The directory will only persist for the duration of the job.
+
+writeGlobalFile(localFileName, cleanup=False)
+- Upload a file (as a path) to the job store.
+- cleanup (bool) : "if True then the copy of the global file will be deleted once 
+				the job and all its successors have completed running. If not the global file 
+				must be deleted manually."
+
+
+deleteLocalFile(fileStoreID)
+- Delete local copies of files associated with the provided job store ID.
+- Raises an OSError with an errno of errno.ENOENT if no such local copies exist. 
+- Thus, cannot be called multiple times in succession.
+
+deleteGlobalFile(fileStoreID)
+- Delete local files and then permanently deletes them from the job store.
+- To ensure that the job can be restarted if necessary, the delete will not 
+  happen until after the job’s run method has completed.
+
+
+
+------------------------------
+
+What are streams in Python ?
+- Streams are high-level async/await-ready primitives to work with network connections. 
+- Streams allow sending and receiving data without using callbacks or low-level protocols and transports.
+
+
+What are callbacks?
+- Callback is a instruction to application to execute a piece of code on some event like click.
+
+
+
+----------------------------------
+
+What is the __init__ method?
+- This method is only used inside class
+- Its only use is to instantiate object attributes of class when a class is called.
+
+
+--------------------------
+
+Note - In toil you can directly start a class using Toil.start()
+
+-----------------------
+
+What is Root job in Toil?
+- All workflows start from a single job, that job is the root job. The return value of the root job is returned as them
+  result of the workflow. Promises are used in root jobs.
+
+
+  -------------------
+
+  toil.job.Job.Runner.addToilOptions() - This method can be used add options to the parser from code itself.
+
+  ------------------------
+Job.wrapFn(func_name,options)
+- This is used to directly convert a function to a job.
+
+---------------------
+
+What is a job function?
+- A function whose first argument is a job, just like a self argument in class. To wrap this function into a job a Job.wrapJobFn() is used.
+
+
+------------------------
+
+How do you make print statements work inside a job?
+- Add logLevel='Debug' in the code.
+
+----------------------------
+How to view graphs in toil?
+
+
+What is promised requirements and how is it different from promises?
+What do promised requirements help us achieve?
+
+What exactly is a job store ?
+
+------------------------------
+What is dynamic job creation?
+- In dynamic job creation, childjobsFn of itself are called from the parent function. Depth is monitored by providing it as a option and then reducing
+it after each level.
+
+
+---------------------------
+
+What is promise?
+- Promise is to return a value before its evaluation. It is given by job.rv()
+
+----------------------------
+
+What is FileID?
+- It is a string and it represents the file's Id in ' file store.
+- FileID has a size attributes. This attribute stores file size in bytes.
+- This FileID object is returned by 2 functions
+	- importFile()
+	- writeGlobalFile()
+- filestore is an attribute of job argument, eg job.filestore
+
+Global stores
+- filestore allows for the creation of files that are globally accessible.
+
+
+---------------------------
+
+What does readGlobalFile() function do ?
+
+--------------------
+
+static createFileStore(jobStore, jobDesc, file_store_dir, waitForPreviousCommit, caching)
+Create a concreate FileStore.
+
+Parameters
+jobStore (AbstractJobStore) –
+
+jobDesc (JobDescription) –
+
+file_store_dir (str) –
+
+waitForPreviousCommit (Callable[[], Any]) –
+
+caching (Optional[bool]) –
+
+Return type
+Union[NonCachingFileStore, CachingFileStore]
+
+
+
+- Explain what is meant by callable[[], Any] for waitForPreviousCommit argument
+- What is AbstractJobStore and how to access its value 
+
+---------------------------------
+
+What is meant by global file and local files in toil?
+
+
+---------------------------------
+Things we can do with the help of filestore API
+
+1: copy a local file data into a filestore file using job.fileStore.writeGlobalFile('localfilepath') - This function returns FileID
+2: export the file using toil.export(fileID,destination=)
+3: getLocalTempDir - create a temporary directory, getLocalTempFile - create temporary file
+4: deleteGlobalFile and deleteLocalFile
+
+
+Things we can not do
+1: Make local singularity containers, interact with these temporary files. They are not able to find temp files.
+
+
+--------------------------------
+
+What is subprocess.check_call
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+----------------------------------------

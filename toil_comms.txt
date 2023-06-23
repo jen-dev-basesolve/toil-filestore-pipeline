@@ -1,0 +1,432 @@
+/* OS library
+OS - It is a library used to interact with the OS or computer itself.
+	 Its functions include:
+	 - Opening a directory
+	 - creatin a dir
+	 - deleting a dir
+	 - showing error 
+
+*/	
+
+import os
+
+-------------------------------
+
+/* tempfile library
+
+tempfile - It is a library used to create temporary files. Temp files are created when large amounts of data is to be processed.
+            These files are deleted after their work is done.
+*/
+
+import tempfile
+
+-------------------------------
+
+from toil.common impor toil
+
+# assuming here toil.common is the parent library from which we import toil
+
+------------------------------
+from toil.job import job
+
+
+
+
+------------------------------
+# What is initialization ?
+
+>> Initialization is assingment of initial values to a variable
+
+-----------------------------
+
+# Constructors
+
+Constructors are like methods, only difference is that they dont return anything.
+Constructors are used for initialisation of the objects.
+
+# In python constructors are used to instantiate variable that are used in other methods. Two types of constructors, default and parameterized.
+
+
+# default constructor
+class people:
+    
+    # init method or constructor
+    def __init__(self,age)
+        self.age = 260
+        
+    def my_details(self):
+        print("my age is " , self.age)
+        
+
+person = people(260)
+person.my_details()
+
+>> my age is 260
+
+-----------------------------
+# Parameterized constructor. In this type of constructor parameters are initialized.
+
+class Addition:
+    first = 0
+    second = 0
+    answer = 0
+ 
+    # parameterized constructor
+    def __init__(self, f, s):
+        self.first = f
+        self.second = s
+ 
+    def display(self):
+        print("First number = " + str(self.first))
+        print("Second number = " + str(self.second))
+        print("Addition of two numbers = " + str(self.answer))
+ 
+    def calculate(self):
+        self.answer = self.first + self.second
+ 
+ 
+# creating object of the class
+# this will invoke parameterized constructor
+obj1 = Addition(1000, 2000)
+obj1.display()
+obj1.calculate()
+
+>> First number = 1000
+   Second number = 2000
+   3000 
+    
+    
+# What is constructor overide
+It is used when all properties of parent are not required in child class. Super() can be used for this purpose.
+
+-----------------------------
+# Sample toil programs
+
+import os
+import tempfile
+
+from toil.common import Toil
+from toil.job import Job
+
+
+def helloWorld(message, memory="2G", cores=2, disk="3G"):
+    return f"Hello, world!, heres a message: {message}"
+
+def second_function(a,b,memory="2G", cores=2, disk="3G"):
+    return (a*b)
+
+if __name__ == "__main__":
+    jobstore: str = tempfile.mkdtemp("tutorial_quickstart") # tempfile.mkdtemp() makes a temporary directory.
+                                                            # What does " jobstore: str = " do?
+                                                            # This is same as jobstore = tempfile.mkdtemp(), so why did we add an extra keyword string. 
+    os.rmdir(jobstore)                                      # os.rmdir removes a directory. 
+                                                            # rmdir() takes path as input, I am assuming jobstore from above line saves the path of the temporary file.
+    options = Job.Runner.getDefaultOptions(jobstore)        # Job.Runner.getDefaultOptions takes in jobstore as input. 
+                                                            # And returns options used by toil workflow as output in the form of argparse.Arguments 
+    options.logLevel = "OFF"                                # when logLevel=OFF, only critical logs are shown
+    options.clean = "always"                                # when clean = "always" the jobstore is deleted after completion. By default it is "never"
+
+    hello_job = Job.wrapFn(helloWorld, "Woot")              # wrapFn is used to wrap the function, similar to decorators.
+                                                            # Job.wrapFn(function,arguments).
+                                                            # wrapFn has two arguments, 1st is the name of the function, 2nd is the inputs to that function
+                                                            # There is no compulsion  to use wrapFn, we can work without it aswell using Job.function(args) method.
+    second_job = Job.wrapFn(second_function,5,3)
+    
+    with Toil(options) as toil:                             # basically toil = Toil(options)
+        print(toil.start(hello_job))                        # toil.start initiates toil workflow. Takes rootJob as input. Returns job value
+        # prints "Hello, world!, ..." 
+
+        print(toil.start(second_job))
+        # prints 15
+        
+OUTPUT:
+>> 
+Workflow Progress 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 (0 failures) [00:00<00:00, 4.64 jobs/s]
+Hello, world!, heres a message: Eeehh....hannnn
+
+Workflow Progress 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 (0 failures) [00:00<00:00, 4.37 jobs/s]
+15
+
+
+# Steps involved in toil workflow
+
+1) Define methods
+2) Assign Jobs to them
+  
+
+---------------------------------------------------------
+# Next questions
+
+1) What are child jobs?
+2) What is the difference between Run and start in a job
+
+
+----------------------------------------------------
+# Toil example 2
+from toil.job import Job
+
+class HelloWorld(Job):
+    def __init__(self,message):
+        Job.__init__(self,  memory="2G", cores=2, disk="3G")
+        self.message = message
+        
+    def run(self,filestore):
+        return f"Hello world, here is the message: {self.message}"
+    
+if __name__=='__main__':
+    jobstore: str = tempfile.mkdtemp("tutorial_invokeworkflow")
+    os.rmdir(jobstore)
+    options = Job.Runner.getDefaultOptions(jobstore)
+    options.logLevel = "OFF"
+    options.clean = "always"
+
+    hello_job = HelloWorld("Woot")          # class can be assigned directly to a job like here, but functions need to use wrapFn.
+
+    with Toil(options) as toil:
+        print(toil.start(hello_job))     
+
+-------------------------------------------------------
+child jobs
+- They are run after the root job. All child jobs are run parallely
+
+Followon jobs
+- They are run after the root job and its childjobs 
+
+syntax:
+
+    j1 = Job.wrapJobFn(helloWorld, "first")
+    j2 = Job.wrapJobFn(helloWorld, "second or third")
+    j3 = Job.wrapJobFn(helloWorld, "second or third")
+    j4 = Job.wrapJobFn(helloWorld, "last")
+
+    j1.addChild(j2)
+    j1.addChild(j3)
+    j1.addFollowOn(j4)
+
+with Toil(options) as toil:         # This will run all the jobs
+    print(toil.start(j1))           # The output is just above the horizontal workflow bar.
+
+---------------------------------------------
+
+rv()  # this is used to create a promise. It is part of toil.job.Job.rv()
+
+example code
+
+    j1 = Job.wrapJobFn(fn, 1)
+    j2 = j1.addChildJobFn(fn, j1.rv())      # here the value of j1 is given to j2, and return value of j2 is given to j3 using rv()
+    j3 = j1.addFollowOnJobFn(fn, j2.rv())
+
+    with Toil(options) as toil:
+        toil.start(j1)
+
+
+--------------------------------------------
+
+In toil there is one leader process and many worker processes.
+
+Q. Who is leader and who is worker?
+Q. How to differ between leader and worker processes?
+Q. What are Job functions and what are vanilla functions?
+Q. Difference between running and starting a job?
+Q. How to use .rv() correctly?
+Q. What is jobstore? What is its function?
+Q. Difference between wrapFn and wrapJobFn?
+' Ans - wrapJobFn is used when the method is initiated with Job as its first argument. eg when func(Job,**kwargs) is to be assigned to a job, we will use wrapJobFn.'
+'     - These type of functions are called as job functions.'
+
+------------------------------------------
+
+Q What are the type of jobs in toil?
+- my_job = Job(function(*args))
+- my_job = Job.wrapFn(func)
+- my_job = Job.wrapJobFn(func)
+- my_job.addChild(job_2)
+- my_job.addChildFn(job_2)
+- my_job.addChildJobFn(job_2)
+- my_job.addFollowOn(job_2)
+- my_job.addFollowOnJobFn(job_2)
+
+# Dyanmic job creation
+# Promises
+
+
+------------------------------------------
+Very important point
+' The workflow is executed in the final line, which creates an instance of HelloWorld and runs it as a workflow. Note all Toil workflows start from a single starting job, referred to as the root job. The return value of the root job is returned as the result of the completed workflow (see promises below to see how this is a useful feature!). '
+
+
+-----------------------------------------
+rv(path) or promise
+
+- Promise is a class used to return the values of jobs/services that are not yet run/started.
+- rv() is a list
+- rv is slicable
+- slicing makes sense only in the end of the path
+- 
+
+
+
+------------------------------------
+toil.run defines the actions need to be executed when a single job is run.,
+toil.start is used to initiate the whole workflow.
+
+----------------------------------
+
+# So where can I use promises?
+# My functions dont return anything?
+# Should they return somethings to other functions?
+
+
+---------------------------------
+# jobs are way of calling out functions
+# Multiple jobs can call out a single function with different inputs.
+
+------------------------------------
+def parentJob(job):
+    downloadJob = Job.wrapJobFn(stageFn, "file://" + os.path.realpath(__file__), cores=0.1, memory='32M', disk='1M')
+    job.addChild(downloadJob)
+
+    analysis = Job.wrapJobFn(analysisJob,
+                             fileStoreID=downloadJob.rv(0), # This should give importedfile name
+                             disk=PromisedRequirement(downloadJob.rv(1))) # this should give the size of the importedfile
+    job.addFollowOn(analysis) 
+
+
+def stageFn(job, url, cores=1):
+    importedFile = job.fileStore.import_file(url)
+    return importedFile, importedFile.size
+
+
+def analysisJob(job, fileStoreID, cores=2):
+    # now do some analysis on the file
+    pass
+
+
+if __name__ == "__main__":
+    jobstore: str = tempfile.mkdtemp("tutorial_requirements")
+    os.rmdir(jobstore)
+    options = Job.Runner.getDefaultOptions(jobstore)
+    options.logLevel = "INFO"
+    options.clean = "always"
+
+    with Toil(options) as toil:
+        toil.start(Job.wrapJobFn(parentJob))
+
+
+
+------------------------------------------
+------------------------------------------
+------------------------------------------
+------------------------------------------
+
+Docker in toil
+
+
+example of docker call
+
+dockerCall(job=job,
+            tool='quay.io/ucsc_cgl/bwa',
+            workDir=job.tempDir,
+            parameters=['index', '/data/reference.fa'])
+            
+
+-----------------------------------------
+docker call can be added to workflows like :-
+
+import os
+import tempfile
+
+from toil.common import Toil
+from toil.job import Job
+from toil.lib.docker import apiDockerCall
+
+align = Job.wrapJobFn(apiDockerCall,
+                      image='ubuntu',
+                      working_dir=os.getcwd(),
+                      parameters=['ls', '-lha'])
+
+if __name__ == "__main__":
+    jobstore: str = tempfile.mkdtemp("tutorial_docker")
+    os.rmdir(jobstore)
+    options = Job.Runner.getDefaultOptions(jobstore)
+    options.logLevel = "INFO"
+    options.clean = "always"
+
+    with Toil(options) as toil:
+        toil.start(align)
+
+
+
+----------------------------------
+Link to python library for using Docker API - 'https://docker-py.readthedocs.io/en/stable/'
+ else blocks is toil.options.restart.
+
+For example:
+
+import os
+import tempfile
+----------------
+
+Toil is a meta scheduler, whereas slurm is a complete scheduler
+
+----------------
+Batch system command line options
+
+--batchSystem <slurm,aws-bacth,torque,kubernetes>
+# to mention which batch system to use
+
+-----------------
+Run a toil script using slurm
+$ python test.py file:my-job-store --batchSystem slurm --disableCaching --stats
+
+# --stats will save the stats in jobstore created, for this to work, the job store should not be cleaned
+
+
+-------------------
+Check statistics in tabular form
+$ toil stats file:my-job-store
+
+-------------------------------
+Running toil from command line
+
+$ python test.py my_job_store
+
+
+-------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,112 @@
+Metadata-Version: 2.1
+Name: toil
+Version: 5.11.0
+Summary: Pipeline management software for clusters.
+Home-page: https://github.com/DataBiosphere/toil
+Author: Benedict Paten and the Toil community
+Author-email: toil-community@googlegroups.com
+License: Apache License v2.0
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: Intended Audience :: Healthcare Industry
+Classifier: License :: OSI Approved :: Apache Software License
+Classifier: Natural Language :: English
+Classifier: Operating System :: MacOS :: MacOS X
+Classifier: Operating System :: POSIX
+Classifier: Operating System :: POSIX :: Linux
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Topic :: Scientific/Engineering
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
+Classifier: Topic :: Scientific/Engineering :: Astronomy
+Classifier: Topic :: Scientific/Engineering :: Atmospheric Science
+Classifier: Topic :: Scientific/Engineering :: Information Analysis
+Classifier: Topic :: Scientific/Engineering :: Medical Science Apps.
+Classifier: Topic :: System :: Distributed Computing
+Classifier: Topic :: Utilities
+Requires-Python: >=3.7
+License-File: LICENSE
+Requires-Dist: dill (<0.4,>=0.3.2)
+Requires-Dist: requests (<3,>=2)
+Requires-Dist: docker (<6,>=3.7.2)
+Requires-Dist: urllib3 (<2.0.0,>=1.26.0)
+Requires-Dist: python-dateutil
+Requires-Dist: psutil (<6,>=3.0.1)
+Requires-Dist: py-tes (<1,>=0.4.2)
+Requires-Dist: PyPubSub (<5,>=4.0.3)
+Requires-Dist: addict (<2.5,>=2.2.1)
+Requires-Dist: pytz (>=2012)
+Requires-Dist: enlighten (<2,>=1.5.2)
+Requires-Dist: typing-extensions
+Provides-Extra: all
+Requires-Dist: boto (<3,>=2.48.0) ; extra == 'all'
+Requires-Dist: boto3-stubs[boto3,iam,s3,sdb,sts] (<2,>=1.20.46) ; extra == 'all'
+Requires-Dist: cwltool (==3.1.20230425144158) ; extra == 'all'
+Requires-Dist: schema-salad (<9,>=8.4.20230128170514) ; extra == 'all'
+Requires-Dist: galaxy-tool-util ; extra == 'all'
+Requires-Dist: ruamel.yaml (<=0.17.21,>=0.15) ; extra == 'all'
+Requires-Dist: ruamel.yaml.clib (>=0.2.6) ; extra == 'all'
+Requires-Dist: networkx (<2.8.9,>=2) ; extra == 'all'
+Requires-Dist: CacheControl[filecache] ; extra == 'all'
+Requires-Dist: pynacl (<2,>=1.4.0) ; extra == 'all'
+Requires-Dist: apache-libcloud (<3,>=2.2.1) ; extra == 'all'
+Requires-Dist: google-cloud-storage (<=2.8.0,>=2) ; extra == 'all'
+Requires-Dist: kubernetes (<22,>=12.0.1) ; extra == 'all'
+Requires-Dist: kubernetes-stubs (==v22.6.0post1) ; extra == 'all'
+Requires-Dist: types-urllib3 ; extra == 'all'
+Requires-Dist: types-PyYAML ; extra == 'all'
+Requires-Dist: idna (>=2) ; extra == 'all'
+Requires-Dist: pymesos (<0.4,>=0.3.15) ; extra == 'all'
+Requires-Dist: miniwdl (==1.9.1) ; extra == 'all'
+Requires-Dist: wdlparse (==0.1.0) ; extra == 'all'
+Requires-Dist: connexion[swagger-ui] (<3,>=2.10.0) ; extra == 'all'
+Requires-Dist: flask (<3,>=2.0) ; extra == 'all'
+Requires-Dist: werkzeug (<3,>=2.0) ; extra == 'all'
+Requires-Dist: flask-cors (==3.0.10) ; extra == 'all'
+Requires-Dist: gunicorn (==20.1.0) ; extra == 'all'
+Requires-Dist: celery (<6,>=5.1.0) ; extra == 'all'
+Requires-Dist: wes-service (<5,>=4.0.0) ; extra == 'all'
+Requires-Dist: ruamel.yaml (<0.17.22,>=0.15) ; extra == 'all'
+Provides-Extra: aws
+Requires-Dist: boto (<3,>=2.48.0) ; extra == 'aws'
+Requires-Dist: boto3-stubs[boto3,iam,s3,sdb,sts] (<2,>=1.20.46) ; extra == 'aws'
+Provides-Extra: cwl
+Requires-Dist: cwltool (==3.1.20230425144158) ; extra == 'cwl'
+Requires-Dist: schema-salad (<9,>=8.4.20230128170514) ; extra == 'cwl'
+Requires-Dist: galaxy-tool-util ; extra == 'cwl'
+Requires-Dist: ruamel.yaml (<=0.17.21,>=0.15) ; extra == 'cwl'
+Requires-Dist: ruamel.yaml.clib (>=0.2.6) ; extra == 'cwl'
+Requires-Dist: networkx (<2.8.9,>=2) ; extra == 'cwl'
+Requires-Dist: CacheControl[filecache] ; extra == 'cwl'
+Provides-Extra: encryption
+Requires-Dist: pynacl (<2,>=1.4.0) ; extra == 'encryption'
+Provides-Extra: google
+Requires-Dist: apache-libcloud (<3,>=2.2.1) ; extra == 'google'
+Requires-Dist: google-cloud-storage (<=2.8.0,>=2) ; extra == 'google'
+Provides-Extra: htcondor
+Requires-Dist: htcondor (<11,>=10.2.0.post1) ; (sys_platform!="darwin") and extra == 'htcondor'
+Provides-Extra: kubernetes
+Requires-Dist: kubernetes (<22,>=12.0.1) ; extra == 'kubernetes'
+Requires-Dist: kubernetes-stubs (==v22.6.0post1) ; extra == 'kubernetes'
+Requires-Dist: types-urllib3 ; extra == 'kubernetes'
+Requires-Dist: types-PyYAML ; extra == 'kubernetes'
+Requires-Dist: idna (>=2) ; extra == 'kubernetes'
+Provides-Extra: mesos
+Requires-Dist: pymesos (<0.4,>=0.3.15) ; extra == 'mesos'
+Provides-Extra: server
+Requires-Dist: connexion[swagger-ui] (<3,>=2.10.0) ; extra == 'server'
+Requires-Dist: flask (<3,>=2.0) ; extra == 'server'
+Requires-Dist: werkzeug (<3,>=2.0) ; extra == 'server'
+Requires-Dist: flask-cors (==3.0.10) ; extra == 'server'
+Requires-Dist: gunicorn (==20.1.0) ; extra == 'server'
+Requires-Dist: celery (<6,>=5.1.0) ; extra == 'server'
+Requires-Dist: wes-service (<5,>=4.0.0) ; extra == 'server'
+Requires-Dist: ruamel.yaml (<0.17.22,>=0.15) ; extra == 'server'
+Provides-Extra: wdl
+Requires-Dist: miniwdl (==1.9.1) ; extra == 'wdl'
+Requires-Dist: wdlparse (==0.1.0) ; extra == 'wdl'
+

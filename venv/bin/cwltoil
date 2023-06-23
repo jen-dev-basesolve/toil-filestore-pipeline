@@ -1,0 +1,8 @@
+#!/home/bioinfo/Desktop/Basesolve_jm/toil_filestore/venv/bin/python
+# -*- coding: utf-8 -*-
+import re
+import sys
+from toil.cwl.cwltoil import cwltoil_was_removed
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.exit(cwltoil_was_removed())
