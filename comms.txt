@@ -187,7 +187,13 @@ Things we can not do
 
 --------------------------------
 
-What is subprocess.check_call
+What is subprocess.check_call?
+
+
+/tmp/13df1e09e3545a768ad7c2c6e53b8c92/db1f/bb94/tmpyq8p5q3_
+/tmp/13df1e09e3545a768ad7c2c6e53b8c92/9f25/d60d/tmp73he3xks
+/tmp/13df1e09e3545a768ad7c2c6e53b8c92/7e10/bcdc/tmptr1c2pyd
+
 
 
 

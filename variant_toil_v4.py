@@ -49,9 +49,11 @@ def ref_genome(job):
 
 
 # Indexing reference fasta file
-def index_ref(job,path,inputFileID,memory="2G", cores=2, disk="3G"):
-    comms = f"singularity exec {path}/bwa_latest.sif bwa index {inputFileID}"
-    os.system(comms)
+def index_ref(job,path,memory="2G", cores=2, disk="3G"):
+    comms = "singularity exec %s/bwa_latest.sif bwa index %s/dc_workshop_1/data/ref_genome/ecoli_rel606.fasta"%(path,path)
+    process = os.popen(comms)
+    process.read()
+    job.log("".join(["Following is the path >>>>",str(path)]))
 
 # Downloading trimmed FastQ files for faster operations
 def fastq_files(job,tempdir_path,path,memory="4G", cores=4, disk="5G"):
